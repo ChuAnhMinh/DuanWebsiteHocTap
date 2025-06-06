@@ -70,47 +70,13 @@ a {
 .header .body {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 36px 0 8px;
 }
 
 .header .logo-heading {
     color: #e6a800;
     font-size: 3.5rem;
-}
-
-.nav {
-    margin-left: auto;
-}
-
-.nav ul {
-    display: flex;
-}
-
-.nav a {
-    position: relative;
-    padding: 8px 21px;    
-    font-weight: 400;
-    font-size: 1.6rem;
-    color: #5f5b53;
-}
-
-.nav a:hover,
-.nav li.active a {
-    /* font-weight: 600; */
-    text-shadow: 1px 0 0 currentColor;
-    color: #171100;
-}
-
-.nav li.active a::after {
-    position: absolute;
-    left: 21px;
-    bottom: 6px;
-    content: "";
-    display: block;
-    width: 12px;
-    height: 2px;
-    background: #171100;
-    border-radius: 1px;
 }
 
 .header .sign-up-btn {
