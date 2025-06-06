@@ -269,6 +269,40 @@ form.sign-in-form {
   pointer-events: all;
 }
 
+.forgot-password-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.divider {
+  width: 100%;
+  max-width: 380px; 
+  height: 3px;
+  background-color: #ffd666;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.forgot-password {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-bottom: auto; 
+}
+
+.forgot-password a {
+  text-decoration: none;
+  color: #666;
+  transition: color 0.3s ease;
+}
+
+.forgot-password a:hover {
+  color: #ffd666;
+}
+
 @media (max-width: 870px) {
   .container {
     min-height: 800px;

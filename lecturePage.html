@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyStudy</title>
+
+    <!--Reset CSS -->
+    <link rel="stylesheet" href="./assets/css/reset.css">
+
+    <!-- Embed font-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sen:wght@400..800&display=swap" rel="stylesheet">
+    <!--Styles CSS-->
+    <link rel="stylesheet" href="./assets/css/lecturePage.css">
+</head>
+<body>
+    <header class="header fixed">
+        <div class="back-button">< Back </div>
+        <div class="circular-progress small">
+            <svg class="progress-ring" width="30" height="30">
+                <circle class="progress-ring-bg" cx="15" cy="15" r="13" />
+                <circle class="progress-ring-circle" cx="15" cy="15" r="13" />
+            </svg>
+            <div class="progress-text">75%</div>
+        </div>
+        <img src="https://i.pinimg.com/236x/5e/e0/82/5ee082781b8c41406a2a50a0f32d6aa6.jpg" alt="Avatar" class="avatar"/>
+    </header>
+    <main>
+        <div class="body">
+            <div id="title">
+                <h1 class="title" id="courseName"></h1>
+                <h2 class="sub-title" id="teacherName"></h2>
+                <hr>
+            </div>
+            <div class="lecture-content">
+                <div class="lecture">
+                    <h1 class="lecture-name" id="lectureName"></h1>
+                    <h2 class="chapter-name" id="chapterName"></h2>
+                    <video controls autoplay muted loop>
+                        <source src="video.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="vertical-seperator"></div>
+                <div id="lectures">
+                    <div class="list-group">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+<script src="./Assets/js/lecture.js"></script>
