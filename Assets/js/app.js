@@ -31,8 +31,17 @@ document
 
         // neu success bang true, thif dieu huong sang man login thanh cong
         if (data.success) {
-          localStorage.setItem('jwt', data.token);
-          window.location.href = "studentPage.html";
+            localStorage.setItem("jwt", data.token);
+            localStorage.setItem("role", data.data.role_id);
+            localStorage.setItem("user_id", data.data.user_id);
+            if (data.data.role_id == "R000") {
+                window.location.href = "adminPage.html";
+            } else if (data.data.role_id == "R001") {
+                window.location.href = "teacherPage.html";
+            } else {
+                window.location.href = "studentPage.html";
+            }
+            //   window.location.href = "studentPage.html";
         } else {
             alert(data.message);
         }
@@ -59,7 +68,9 @@ document
         console.log(signUpData);
 
         if (signUpData.success) {
-            document.querySelector('.container').classList.remove('sign-up-mode');
+            document
+                .querySelector(".container")
+                .classList.remove("sign-up-mode");
         } else {
             alert(signUpData.message);
         }
