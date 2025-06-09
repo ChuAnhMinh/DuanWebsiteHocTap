@@ -34,8 +34,11 @@
                             <li>
                                 <a href="#!">Teachers</a>
                             </li>
-                            <li>
+                            <li class="profile-dropdown">
                                 <a href="#!">Profile</a>
+                                <div class="profile-menu">
+                                    <p id="userEmail">yourmail@example.com</p>
+                                </div>
                             </li>
                         </ul>
                     </nav>
@@ -52,7 +55,7 @@
             <div class="main-content">
                 <div class="popular-top">
                         <div class="info">
-                            <h2 class="heading lv2">Our popular courses</h2>
+                            <h2 class="heading lv2">Our courses</h2>
                             <p class="desc">Build new skills with new trendy courses and shine for the next future career.</p>
                         </div>
                         <div class="controls">
@@ -69,80 +72,8 @@
                         </div>
                 </div>
                 <div class="course-list-wrapper">
-                    <div class="course-list">
-                        <!-- Course item 1 -->
-                        <div class="course-item">
-                            <a href="#!"><img src="./Assets/img/Math.jpg" alt="" class="thumb"></a>
-                            <div class="info">
-                                <div class="head">
-                                    <h3 class="title"><a href="./videoPlaylist.html" class="line-clamp break-all">Math</a></h3>
-                                    <div class="rating">
-                                        <img src="./assets/img/Star 6.svg" alt="Star" class="star">
-                                        <span class="value">4.5</span>
-                                    </div>
-                                </div>
-                                <p class="desc line-clamp line-2 break-all">Get the best course, gain knowledge and shine for your future career.</p>
-                                <div class="foot">
-                                    <a href="./videoPlaylist.html"><button class="btn book-btn">Book now</button></a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Course item 2 -->
-
-                        <div class="course-item">
-                            <a href="#!"><img src="./Assets/img/Physics.jpg" alt="" class="thumb"></a>
-                            <div class="info">
-                                <div class="head">
-                                    <h3 class="title"><a href="#!" class="line-clamp break-all">Physics</a></h3>
-                                    <div class="rating">
-                                        <img src="./assets/img/Star 6.svg" alt="Star" class="star">
-                                        <span class="value">4.5</span>
-                                    </div>
-                                </div>
-                                <p class="desc line-clamp line-2 break-all">Get the best course, gain knowledge and shine for your future career.</p>
-                                <div class="foot">
-                                    <button class="btn book-btn">Book now</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Course Item 3-->
-
-                        <div class="course-item">
-                            <a href="#!"><img src="./Assets/img/Science.jpg" alt="" class="thumb"></a>
-                            <div class="info">
-                                <div class="head">
-                                    <h3 class="title"><a href="#!" class="line-clamp break-all">Science</a></h3>
-                                    <div class="rating">
-                                        <img src="./assets/img/Star 6.svg" alt="Star" class="star">
-                                        <span class="value">4.5</span>
-                                    </div>
-                                </div>
-                                <p class="desc line-clamp line-2 break-all">Get the best course, gain knowledge and shine for your future career.</p>
-                                <div class="foot">
-                                    <button class="btn book-btn">Book now</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Course item 4 -->
-                        <div class="course-item">
-                            <a href="#!"><img src="./Assets/img/Math.jpg" alt="" class="thumb"></a>
-                            <div class="info">
-                                <div class="head">
-                                    <h3 class="title"><a href="#!" class="line-clamp break-all">Math</a></h3>
-                                    <div class="rating">
-                                        <img src="./assets/img/Star 6.svg" alt="Star" class="star">
-                                        <span class="value">4.5</span>
-                                    </div>
-                                </div>
-                                <p class="desc line-clamp line-2 break-all">Get the best course, gain knowledge and shine for your future career.</p>
-                                <div class="foot">
-                                    <button class="btn book-btn">Book now</button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="course-list" id="course-list">
+                        
                     </div>
                 </div>
             </div>
@@ -276,7 +207,7 @@
                     </div>
                 </div>
     </footer>
-    <script src="./Assets/js/student.js"></script>
+    <script src="./Assets/js/student-course-scroll.js"></script>
     <script src="./Assets/js/member-scroll.js"></script>
 </body>
 </html>

@@ -182,6 +182,43 @@ a {
     margin-left: 49px;
 }
 
+/* Profile Dropdown */
+.profile-dropdown {
+    position: relative;
+}
+
+.profile-dropdown .profile-menu {
+    position: absolute;
+    top: calc(100% + 36px);
+    right: -170px;
+    transform: translateX(-50%) translateY(10px);
+    background-color: #fff;
+    border: 1px solid #e2dfda;
+    border-radius: 8px;
+    min-width: 220px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    padding: 12px;
+    z-index: 10;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.profile-dropdown:hover .profile-menu {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+}
+
+.profile-menu p {
+    font-size: 1.4rem;
+    color: #333;
+    margin: 0;
+    font-weight: 500;
+    word-break: break-all;
+    text-align: center;
+}
+
 /* Popular */
 
 .popular {
