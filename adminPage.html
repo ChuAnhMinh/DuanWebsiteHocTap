@@ -3,9 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./Assets/css/adminPage.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sen:wght@400..800&display=swap" rel="stylesheet">
     <title>MyStudy</title>
 </head>
 <body>
-    
+    <header class="top-bar">
+        <button id="hamburger" class="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <h1 class="logo-heading">MyStudy</h1>
+    </header>
+
+    <nav id="sidebar" class="sidebar">
+        <a href="adminPage.html?view=courses">Courses</a>
+        <a href="adminPage.html?view=users">Users</a>
+    </nav>
+
+    <main class="main-content">
+        <div id="course-section">
+            <div style="display: flex; justify-content: space-between">
+                <h1>Courses</h1>
+                <button class="btn" onclick="openAddCoursePopup()">Add course</button>
+            </div>
+            <div class="table-container">
+                <table id="course-list">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Course Name</th>
+                        <th>Teacher</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="popup-overlay" id="addCourseOverlay">
+                <div class="popup" style="flex-direction: column;">
+                    <form id="addCourseForm" onsubmit="handleAddCourse(event)">
+                        <h2>Add Course</h2>
+                        <h4>Course Title</h4>
+                        <input type="text" id="newCourseName" name="courseName" placeholder="Course Name"
+                               style="width: 400px; margin-top: 10px; margin-bottom: 10px" required>
+                        <h4>Teacher</h4>
+                        <select id="newTeacherSelect" name="teacherId"
+                                style="margin-top: 10px; margin-bottom: 10px" required>
+                        </select>
+                        <div>
+                            <button id="addCourse" type="submit">Save</button>
+                            <button type="button" onclick="closeAddCoursePopup()">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="popup-overlay" id="popupOverlay">
+                <div class="popup" style="flex-direction: column">
+                    <h2>Edit Course</h2>
+                    <form id="editCourseForm" onsubmit="handleSaveCourse(event)">
+                        <h4>Course Title</h4>
+                        <input type="text" id="courseName" placeholder="Course Name" style="width: 400px; margin-top: 10px; margin-bottom: 10px" required>
+                        <h4>Teacher</h4>
+                        <select id="teacherSelect" style="margin-bottom: 20px"></select>
+                        <button id="editCourse" type="submit">Save</button>
+                    </form>
+                    <div class="chapter-container">
+                        <h3>Chapters</h3>
+                        <div>
+                            <input type="text" id="newChapterName" placeholder="New chapter title" style="height: 20px">
+                            <button onclick="handleAddChapter()" id="addChapter" disabled>Add chapter</button>
+                        </div>
+                        <table id="chapter-list">
+                            <thead>
+                            <tr>
+                                <th>Chapter Name</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <button onclick="closeEditPopup()">Close</button>
+                </div>
+                <div class="popup-backdrop" id="popupBackdrop" style="display: none;"></div>
+                <div class="popup second-popup" id="chapterPopup" style="display: none;">
+                    <h2>Edit Chapter</h2>
+                    <form id="chapterEditForm" onsubmit="handleSaveChapter(event)">
+                        <div style="display: flex; flex-direction: column; gap: 10px; padding-bottom: 10px">
+                            <div style="width: auto">
+                                <h3>Chapter Name</h3>
+                                <textarea id="chapterName" type="text" rows="3" style="width: 700px; max-width: 100%" required></textarea>
+                            </div>
+                            <button type="submit" style="width: 75px; text-align: center">Save</button>
+                        </div>
+                    </form>
+                    <h3>Lessons</h3>
+                    <div id="chapterDetails">
+                        <div class="lecture-content">
+                            <div class="lecture">
+                                <form id="lectureForm" onsubmit="handleSaveLesson(event)">
+                                    <div style="display: flex; flex-direction: column; gap: 10px; padding-bottom: 10px">
+                                        <label for="previewLecture">Lesson Name</label>
+                                        <input id="previewLecture" type="text" required>
+                                    </div>
+                                    <video controls autoplay muted loop>
+                                        <source src="video.mp4" type="video/mp4">
+                                    </video>
+                                    <div style="display: flex; flex-direction: column; gap: 10px; padding-bottom: 10px">
+                                        <label for="newVideo">Upload new video</label>
+                                        <input id="newVideo" type="file">
+                                    </div>
+                                    <div style="display: flex; flex-direction: column; gap: 10px; padding-bottom: 10px">
+                                        <label for="content">Content</label>
+                                        <textarea id="content" placeholder="Content"></textarea>
+                                    </div>
+                                    <div style="display: flex; gap: 10px">
+                                        <button type="submit" id="addLecture">Save lesson</button>
+                                        <button id="deleteLecture" type="button" onclick="handleDeleteLesson()" style="background: red">Delete lesson</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="vertical-seperator"></div>
+                            <div id="lectures">
+                                <div class="list-group">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="closeChapterPopup()">Close</button>
+                </div>
+            </div>
+        </div>
+        <div id="user-section">
+            <div style="display: flex; justify-content: space-between">
+                <h1>Users</h1>
+                <button class="btn" onclick="openAddUserPopup()">Add user</button>
+            </div>
+            <div class="table-container">
+                <table id="user-list">
+                    <thead>
+                    <tr>
+                        <th style="width: 100px">ID</th>
+                        <th>Username</th>
+                        <th>Name</th>
+                        <th style="width: 150px">Role</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="popup-overlay" id="addUserOverlay">
+                <div class="popup" style="flex-direction: column;">
+                    <form id="addUserForm" onsubmit="handleNewUser(event)">
+                        <h2>Add User</h2>
+
+                        <h4>Username</h4>
+                        <input type="text" id="newUsername" name="username" placeholder="Username"
+                               style="width: 400px; margin-top: 10px; margin-bottom: 10px" required>
+
+                        <h4>Password</h4>
+                        <input type="text" id="newPassword" name="password" placeholder="Password"
+                               style="width: 400px; margin-top: 10px; margin-bottom: 10px" required>
+
+                        <h4>Email</h4>
+                        <input type="email" id="newEmail" name="email" placeholder="Email"
+                               style="width: 400px; margin-top: 10px; margin-bottom: 10px" required>
+
+                        <h4>Name</h4>
+                        <input type="text" id="newName" name="name" placeholder="Name"
+                               style="width: 400px; margin-top: 10px; margin-bottom: 10px" required>
+
+                        <h4>Role</h4>
+                        <select id="newRoleSelect" name="role"
+                                style="margin-top: 10px; margin-bottom: 10px" required>
+                            <option value="R000">Admin</option>
+                            <option value="R002">User</option>
+                            <option value="R001">Teacher</option>
+                        </select>
+
+                        <div>
+                            <button id="addUser" type="submit">Save</button>
+                            <button type="button" onclick="closeAddUserPopup()">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="popup-overlay" id="editUserOverlay">
+                <div class="popup" style="flex-direction: column;">
+                    <form id="editUserForm" onsubmit="handleSaveUser(event)">
+                        <h2>Edit User</h2>
+
+                        <h4>Username</h4>
+                        <input type="text" id="editUsername" name="username" placeholder="Username"
+                               style="width: 400px; margin-top: 10px; margin-bottom: 10px" required>
+
+                        <h4>Email</h4>
+                        <input type="email" id="editEmail" name="email" placeholder="Email"
+                               style="width: 400px; margin-top: 10px; margin-bottom: 10px" required>
+
+                        <h4>Name</h4>
+                        <input type="text" id="editName" name="name" placeholder="Name"
+                               style="width: 400px; margin-top: 10px; margin-bottom: 10px" required>
+
+                        <h4>Role</h4>
+                        <select id="editRoleSelect" name="role"
+                                style="margin-top: 10px; margin-bottom: 10px" required>
+                            <option value="R000">Admin</option>
+                            <option value="R002">User</option>
+                            <option value="R001">Teacher</option>
+                        </select>
+
+                        <h4>New Password (optional)</h4>
+                        <input type="password" id="editPassword" name="password" placeholder="Password">
+
+
+                        <div>
+                            <button id="saveUser" type="submit">Save</button>
+                            <button type="button" onclick="closeEditUserPopup()">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="./Assets/js/adminPage.js"></script>
 </html>

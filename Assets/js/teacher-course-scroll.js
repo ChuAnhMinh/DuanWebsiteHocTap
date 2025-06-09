@@ -94,4 +94,33 @@ document.addEventListener('DOMContentLoaded', function() {
     if (email) {
       document.getElementById("userEmail").textContent = email;
     }
+
+
+const form = document.getElementById('createCourseForm');
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const formData = new FormData();
+        formData.append('courseName', document.getElementById('courseName').value);
+        formData.append('courseAvatar', document.getElementById('courseAvatar').files[0]);
+        formData.append('courseDescription', document.getElementById('courseDescription').value);
+
+        fetch('/api/teacher/courses', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Course created:', data);
+            // Reload list courses sau khi tạo
+            fetchCourses();
+            // Đóng modal
+            modalOverlay.classList.add('hidden');
+            // Reset form
+            form.reset();
+        })
+        .catch(error => {
+            console.error('Error creating course:', error);
+        });
+    });
 });

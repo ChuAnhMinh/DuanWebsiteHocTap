@@ -37,9 +37,6 @@
                                     <p id="userEmail">yourmail@example.com</p>
                                 </div>
                             </li>
-                            <li>
-                                <a href="#!">Create Course</a>
-                            </li>
                         </ul>
                     </nav>
                     <div class="action">
@@ -215,12 +212,16 @@
     <div class="modal-overlay hidden" id="createCourseModal">
         <div class="modal-content">
             <h2 class="modal-title">Create New Course</h2>
-            <form class="modal-form">
+            <form class="modal-form" id="createCourseForm">
                 <label for="courseName">Course Name</label>
                     <input type="text" id="courseName" name="courseName" placeholder="Enter course name" required>
 
                 <label for="courseAvatar">Course Avatar</label>
                     <input type="file" id="courseAvatar" name="courseAvatar" accept="image/*" required>
+
+                <!-- Thêm phần Course Description -->
+                <label for="courseDescription">Course Description</label>
+                    <textarea id="courseDescription" name="courseDescription" rows="4" placeholder="Enter course description" required></textarea>
 
                 <div class="modal-actions">
                     <button type="submit" class="btn">Create</button>
