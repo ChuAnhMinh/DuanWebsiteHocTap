@@ -339,8 +339,7 @@ a {
 }
 
 .popular .course-item .head,
-.popular .course-item .foot, 
-.popular .course-item .rating {
+.popular .course-item .foot {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -352,13 +351,6 @@ a {
     font-size: 1.8rem;
     line-height: 1.67;
     color: #171100;
-}
-
-.popular .rating .value {
-    margin-left: 6px;
-    font-size: 1.6rem;
-    line-height: 1.75;
-    color: #fea31b;
 }
 
 .popular .course-item .desc {
@@ -386,6 +378,18 @@ a {
 .popular .course-item .book-btn:hover {
     color: #fff;
     background: var(--primary);
+}
+
+.popular .course-item .delete-btn {
+    border: none;
+    background-color: #ff4d4f; /* Màu đỏ nổi bật */
+    margin-left: 10px;
+}
+
+.popular .course-item .delete-btn:hover {
+    background-color: #d9363e;
+    color: #fff;
+    cursor: pointer;
 }
 
 /* Member */
@@ -601,6 +605,16 @@ a {
     color: #000;
     transform: translateY(-1px);
 }
+
+.modal-form .image-preview {
+    width: 100%;
+    height: 180px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+}
+
 
 /* Footer */
 .footer {

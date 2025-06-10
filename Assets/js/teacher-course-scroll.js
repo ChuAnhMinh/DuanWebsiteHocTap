@@ -1,23 +1,25 @@
-function fetchCourses() {
+async function fetchCourses() {
     const wrapper = document.querySelector('.course-list-wrapper');
     const courseList = document.getElementById('course-list');
 
-    // ======= MOCK DATA khi CHƯA có API =======
-    const courses = [];
+    const teacher_id = localStorage.getItem("user_id");
 
     // ======= KHI có API chỉ cần bỏ đoạn const courses trên và uncomment đoạn fetch dưới =======
-    /*
-    fetch('/api/teacher/courses')
-        .then(res => res.json())
-        .then(courses => {
-            renderCourses(courses);
-        });
-    */
+    const response = await fetch(`http://localhost:3000/course?teacher_id=${teacher_id}`, {
+        method: "GET",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        },
+    });
+    const courses = await response.json();
+    console.log(courses);
+
     
-    // Render courses (dùng chung 1 function)
-    renderCourses(courses);
+    renderCourses(courses.data);
 
     function renderCourses(courses) {
+        console.log(courses)
         courseList.innerHTML = '';
 
         if (courses.length === 0) {
@@ -30,28 +32,60 @@ function fetchCourses() {
             courses.forEach(course => {
                 const courseItem = document.createElement('div');
                 courseItem.className = 'course-item';
-
                 courseItem.innerHTML = `
-                    <a href="${course.link}"><img src="${course.imgSrc}" alt="${course.title}" class="thumb"></a>
+                    <img src="${course.imgSrc}" alt="${course.title}" class="thumb">
                     <div class="info">
                         <div class="head">
-                            <h3 class="title"><a href="${course.link}" class="line-clamp break-all">${course.title}</a></h3>
-                            <div class="rating">
-                                <img src="./assets/img/Star 6.svg" alt="Star" class="star">
-                                <span class="value">${course.rating}</span>
-                            </div>
+                            <h3 class="title"><span class="line-clamp break-all">${course.title}</span></h3>
                         </div>
-                        <p class="desc line-clamp line-2 break-all">${course.desc}</p>
+                        <p class="desc line-clamp line-2 break-all">${course.description}</p>
                         <div class="foot">
-                            <a href="${course.link}"><button class="btn book-btn">Book now</button></a>
+                            <button class="btn book-btn">Book now</button>
+                            <button class="btn delete-btn">Delete</button>
                         </div>
                     </div>
                 `;
 
+                // CLICK mở modal Edit Course
+                courseItem.addEventListener('click', () => {
+                    if (event.target.closest('.book-btn')) return;
+                    document.getElementById('editCourseName').value = course.title;
+                    document.getElementById('editCourseDescription').value = course.desc || '';
+                    document.getElementById('editPreview').src = course.imgSrc || '';
+
+                    // Optional: Lưu ID khóa học vào data attribute nếu sau này cần API
+                    document.getElementById('editCourseForm').dataset.courseId = course.course_id;
+
+                    document.getElementById('editCourseModal').classList.remove('hidden');
+                });
+
                 courseList.appendChild(courseItem);
+                courseItem.querySelector('.delete-btn').addEventListener('click', async (e) => {
+                    e.stopPropagation(); // Không mở modal Edit khi bấm Delete
+
+                    if (confirm('Are you sure you want to delete this course?')) {
+                        try {
+                            const response = await fetch(`http://localhost:3000/course/${course.course_id}`, {
+                            method: 'DELETE',
+                            headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                        },
+                    });
+
+                    const data = await response.json();
+                    console.log('Course deleted:', data);
+                    await fetchCourses(); // Reload list sau khi xóa
+
+                        } catch (error) {
+                            console.error('Error deleting course:', error);
+                        }
+                    }
+                });
+
             });
 
-            // Scroll buttons logic giữ nguyên
+            // Scroll buttons logic
             const controlBtns = document.querySelectorAll('.popular-top .controls .control-btn');
             const prevBtn = controlBtns[0];
             const nextBtn = controlBtns[1];
@@ -66,7 +100,6 @@ function fetchCourses() {
         }
     }
 }
-
 
 const createCourseBtn = document.querySelector('.create-course-btn');
 const modalOverlay = document.getElementById('createCourseModal');
@@ -89,14 +122,14 @@ modalOverlay.addEventListener('click', (event) => {
 document.addEventListener('DOMContentLoaded', function() {
     fetchCourses();
 
-    // Xử lý hiển thị email (phần của bạn đã có sẵn)
+    // Xử lý hiển thị email
     const email = localStorage.getItem("userEmail");
     if (email) {
-      document.getElementById("userEmail").textContent = email;
+        document.getElementById("userEmail").textContent = email;
     }
 
-
-const form = document.getElementById('createCourseForm');
+    // Xử lý submit form tạo khóa học
+    const form = document.getElementById('createCourseForm');
     form.addEventListener('submit', function (event) {
         event.preventDefault();
 
@@ -105,22 +138,76 @@ const form = document.getElementById('createCourseForm');
         formData.append('courseAvatar', document.getElementById('courseAvatar').files[0]);
         formData.append('courseDescription', document.getElementById('courseDescription').value);
 
-        fetch('/api/teacher/courses', {
+        fetch('http://localhost:3000/course', {
             method: 'POST',
-            body: formData
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                title: document.getElementById('courseName').value,
+                description: document.getElementById('courseDescription').value,
+                teacher_id: localStorage.getItem("user_id"),
+            }), // can lay du lieu that
         })
         .then(response => response.json())
         .then(data => {
             console.log('Course created:', data);
-            // Reload list courses sau khi tạo
             fetchCourses();
-            // Đóng modal
             modalOverlay.classList.add('hidden');
-            // Reset form
             form.reset();
         })
         .catch(error => {
             console.error('Error creating course:', error);
         });
+    });
+
+    // Xử lý Cancel Edit
+    document.getElementById('cancelEditBtn').addEventListener('click', () => {
+        document.getElementById('editCourseModal').classList.add('hidden');
+    });
+
+    // Xử lý Submit Edit
+    document.getElementById('editCourseForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const newTitle = document.getElementById('editCourseName').value;
+        const newDescription = document.getElementById('editCourseDescription').value;
+        const newAvatar = document.getElementById('editCourseAvatar').files[0];
+
+        const courseId = document.getElementById('editCourseForm').dataset.courseId;
+
+        console.log('Updated Course:', {
+            id: courseId,
+            newTitle,
+            newDescription,
+            newAvatar
+        });
+
+        // Sau này sẽ PATCH/PUT API tại đây
+
+        fetch(`http://localhost:3000/course/${courseId}`, {
+            method: 'PATCH',
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                title: newTitle,
+                description: newDescription,
+            }), // can lay du lieu that
+        })
+
+        document.getElementById('editCourseModal').classList.add('hidden');
+    });
+
+    // Xử lý Preview avatar khi chọn ảnh mới
+    const editAvatarInput = document.getElementById('editCourseAvatar');
+    const editPreview = document.getElementById('editPreview');
+
+    editAvatarInput.addEventListener('change', function () {
+        const file = this.files[0];
+        if (file) {
+            editPreview.src = URL.createObjectURL(file);
+        }
     });
 });
