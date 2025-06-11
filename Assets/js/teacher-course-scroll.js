@@ -47,10 +47,10 @@ async function fetchCourses() {
                 `;
 
                 // CLICK mở modal Edit Course
-                courseItem.addEventListener('click', () => {
+                courseItem.addEventListener('click', (event) => {
                     if (event.target.closest('.book-btn')) return;
                     document.getElementById('editCourseName').value = course.title;
-                    document.getElementById('editCourseDescription').value = course.desc || '';
+                    document.getElementById('editCourseDescription').value = course.description || '';
                     document.getElementById('editPreview').src = course.imgSrc || '';
 
                     // Optional: Lưu ID khóa học vào data attribute nếu sau này cần API
@@ -63,7 +63,7 @@ async function fetchCourses() {
                 courseItem.querySelector('.delete-btn').addEventListener('click', async (e) => {
                     e.stopPropagation(); // Không mở modal Edit khi bấm Delete
 
-                    if (confirm('Are you sure you want to delete this course?')) {
+                    if (confirm('Ban co chac muon xoa khoa hoc nay?')) {
                         try {
                             const response = await fetch(`http://localhost:3000/course/${course.course_id}`, {
                             method: 'DELETE',
@@ -168,37 +168,37 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Xử lý Submit Edit
-    document.getElementById('editCourseForm').addEventListener('submit', (e) => {
+    document.getElementById('editCourseForm').addEventListener('submit', async (e) => {
         e.preventDefault();
+
         const newTitle = document.getElementById('editCourseName').value;
         const newDescription = document.getElementById('editCourseDescription').value;
-        const newAvatar = document.getElementById('editCourseAvatar').files[0];
-
         const courseId = document.getElementById('editCourseForm').dataset.courseId;
 
-        console.log('Updated Course:', {
-            id: courseId,
-            newTitle,
-            newDescription,
-            newAvatar
-        });
+        try {
+            const response = await fetch(`http://localhost:3000/course/${courseId}`, {
+                method: 'PATCH',
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    title: newTitle,
+                    description: newDescription,
+                }),
+            });
 
-        // Sau này sẽ PATCH/PUT API tại đây
+            const data = await response.json();
+            console.log('Course updated:', data);
 
-        fetch(`http://localhost:3000/course/${courseId}`, {
-            method: 'PATCH',
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                title: newTitle,
-                description: newDescription,
-            }), // can lay du lieu that
-        })
+            await fetchCourses(); // Reload danh sách sau khi cập nhật
+            document.getElementById('editCourseModal').classList.add('hidden');
 
-        document.getElementById('editCourseModal').classList.add('hidden');
+        } catch (error) {
+            console.error('Error updating course:', error);
+        }
     });
+
 
     // Xử lý Preview avatar khi chọn ảnh mới
     const editAvatarInput = document.getElementById('editCourseAvatar');
