@@ -12,43 +12,71 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Sen:wght@400..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
     <!--Styles CSS-->
     <link rel="stylesheet" href="./assets/css/lecturePage.css">
 </head>
 <body>
     <header class="header fixed">
         <div class="back-button">< Back </div>
-        <div class="circular-progress small">
-            <svg class="progress-ring" width="30" height="30">
-                <circle class="progress-ring-bg" cx="15" cy="15" r="13" />
-                <circle class="progress-ring-circle" cx="15" cy="15" r="13" />
-            </svg>
-            <div class="progress-text">75%</div>
-        </div>
-        <img src="https://i.pinimg.com/236x/5e/e0/82/5ee082781b8c41406a2a50a0f32d6aa6.jpg" alt="Avatar" class="avatar"/>
+        <span class="teacher-name"></span>
     </header>
     <main>
         <div class="body">
-            <div id="title">
+            <div id="info-action-row" class="info-action-row">
+            <div class="info-titles">
                 <h1 class="title" id="courseName"></h1>
                 <h2 class="sub-title" id="teacherName"></h2>
-                <hr>
             </div>
-            <div class="lecture-content">
-                <div class="lecture">
-                    <h1 class="lecture-name" id="lectureName"></h1>
-                    <h2 class="chapter-name" id="chapterName"></h2>
-                    <video controls autoplay muted loop>
-                        <source src="video.mp4" type="video/mp4">
-                    </video>
+            <div class="action-buttons">
+                <button class="btn btn-submit approve-btn" id="submitCourseBtn">Gửi Duyệt</button>
+                <button class="btn add-chapter-btn" id="addChapterBtn">Thêm Chương</button>
+                <button class="btn edit-chapter-btn" id="editChapterBtn" disabled>Sửa Chương</button>
+                <button class="btn delete-chapter-btn" id="deleteChapterBtn" disabled>Xóa Chương</button>
+            </div>
+        </div>
+        <hr>
+
+            <!-- Quản lý chương học -->
+            <div id="chapterAdminList"></div>
+
+            <!-- Modal -->
+            <div class="modal-overlay hidden" id="chapterModal">
+                <div class="modal-content">
+                    <h2 class="modal-title">Chương Mới / Cập Nhật</h2>
+                    <form id="chapterForm" class="modal-form">
+                        <input type="hidden" id="editingChapterIndex">
+
+                        <label>Tiêu đề chương</label>
+                        <input type="text" id="chapterTitleInput" required>
+
+                    <label>Bài học</label>
+                    <div id="lectureInputs"></div>
+                    <button type="button" class="btn" id="addLectureInputBtn">+ Thêm Bài Học</button>
+
+                    <div class="modal-actions">
+                        <button type="submit" class="btn">Lưu</button>
+                        <button type="button" class="btn cancel-btn" id="cancelModalBtn">Huỷ</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="vertical-seperator"></div>
+            </div>
+        
+
+            <div class="lecture-content" id="lectureContent">
+                <div class="lecture" id="video-area"></div>
+                <div class="vertical-seperator" id="verticalSeperator"></div>
                 <div id="lectures">
                     <div class="list-group">
+                        <div class="list-group"></div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- Toast thông báo -->
+    <div id="toast" class="toast hidden">Đã gửi thành công!</div>
 </body>
 <script src="./Assets/js/lecture.js"></script>

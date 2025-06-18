@@ -40,15 +40,23 @@ async function fetchCourses() {
                         </div>
                         <p class="desc line-clamp line-2 break-all">${course.description}</p>
                         <div class="foot">
-                            <button class="btn book-btn">Book now</button>
+                            <button class="btn book-btn">Edit Course</button>
                             <button class="btn delete-btn">Delete</button>
                         </div>
                     </div>
                 `;
 
                 // CLICK mở modal Edit Course
+                courseItem.querySelector('.book-btn').addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    localStorage.setItem("editCourseId", course.course_id);
+                    window.location.href = "lecturePage.html";
+                });
+
+                // CLICK vào khối course để mở modal edit course (giữ nguyên nếu muốn)
                 courseItem.addEventListener('click', (event) => {
-                    if (event.target.closest('.book-btn')) return;
+                if (event.target.closest('.book-btn')) return;
+
                     document.getElementById('editCourseName').value = course.title;
                     document.getElementById('editCourseDescription').value = course.description || '';
                     document.getElementById('editPreview').src = course.imgSrc || '';
