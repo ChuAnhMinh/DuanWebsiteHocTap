@@ -33,7 +33,7 @@ async function fetchCourses() {
                 const courseItem = document.createElement('div');
                 courseItem.className = 'course-item';
                 courseItem.innerHTML = `
-                    <img src="${course.imgSrc}" alt="${course.title}" class="thumb">
+                    <img src="http://localhost:3000${course.course_avatar}" alt="${course.title}" class="thumb">
                     <div class="info">
                         <div class="head">
                             <h3 class="title"><span class="line-clamp break-all">${course.title}</span></h3>
@@ -59,7 +59,7 @@ async function fetchCourses() {
 
                     document.getElementById('editCourseName').value = course.title;
                     document.getElementById('editCourseDescription').value = course.description || '';
-                    document.getElementById('editPreview').src = course.imgSrc || '';
+                    document.getElementById('editPreview').src = `http://localhost:3000${course.course_avatar || ''}`;
 
                     // Optional: Lưu ID khóa học vào data attribute nếu sau này cần API
                     document.getElementById('editCourseForm').dataset.courseId = course.course_id;
@@ -142,21 +142,14 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
 
         const formData = new FormData();
-        formData.append('courseName', document.getElementById('courseName').value);
+        formData.append('title', document.getElementById('courseName').value);
+        formData.append('description', document.getElementById('courseDescription').value);
+        formData.append('teacher_id', localStorage.getItem("user_id"));
         formData.append('courseAvatar', document.getElementById('courseAvatar').files[0]);
-        formData.append('courseDescription', document.getElementById('courseDescription').value);
 
         fetch('http://localhost:3000/course', {
             method: 'POST',
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                title: document.getElementById('courseName').value,
-                description: document.getElementById('courseDescription').value,
-                teacher_id: localStorage.getItem("user_id"),
-            }), // can lay du lieu that
+            body: formData
         })
         .then(response => response.json())
         .then(data => {
@@ -177,35 +170,35 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Xử lý Submit Edit
     document.getElementById('editCourseForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
-        const newTitle = document.getElementById('editCourseName').value;
-        const newDescription = document.getElementById('editCourseDescription').value;
-        const courseId = document.getElementById('editCourseForm').dataset.courseId;
+    const courseId = document.getElementById('editCourseForm').dataset.courseId;
 
-        try {
-            const response = await fetch(`http://localhost:3000/course/${courseId}`, {
-                method: 'PATCH',
-                headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    title: newTitle,
-                    description: newDescription,
-                }),
-            });
+    const formData = new FormData();
+    formData.append('title', document.getElementById('editCourseName').value);
+    formData.append('description', document.getElementById('editCourseDescription').value);
 
-            const data = await response.json();
-            console.log('Course updated:', data);
+    const avatarFile = document.getElementById('editCourseAvatar').files[0];
+    if (avatarFile) {
+        formData.append('courseAvatar', avatarFile);
+    }
 
-            await fetchCourses(); // Reload danh sách sau khi cập nhật
-            document.getElementById('editCourseModal').classList.add('hidden');
+    try {
+        const response = await fetch(`http://localhost:3000/course/${courseId}`, {
+            method: 'PATCH',
+            body: formData
+        });
 
-        } catch (error) {
-            console.error('Error updating course:', error);
-        }
-    });
+        const data = await response.json();
+        console.log('Course updated:', data);
+
+        await fetchCourses();
+        document.getElementById('editCourseModal').classList.add('hidden');
+
+    } catch (error) {
+        console.error('Error updating course:', error);
+    }
+});
 
 
     // Xử lý Preview avatar khi chọn ảnh mới

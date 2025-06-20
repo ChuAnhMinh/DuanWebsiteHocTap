@@ -1250,6 +1250,15 @@ hr {
     text-decoration: underline;
 }
 
+.input-video-file {
+    margin-top: 10px;
+    padding: 6px;
+    border: 1px dashed #aaa;
+    border-radius: 6px;
+    width: 100%;
+    background: #f9f9f9;
+}
+
 /*Responsive Mobile: 768px */
 @media (max-width: 767px) {
     html {

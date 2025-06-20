@@ -13,6 +13,12 @@ let modalState = {
 // ==== ĐỔI BASE_URL NẾU BACKEND KHÁC CỔNG/DOMAIN ====
 const BASE_URL = "http://localhost:3000";
 
+function extractYouTubeId(url) {
+    const regExp = /(?:youtube\.com.*(?:\?|&)v=|youtu\.be\/)([^&\s]+)/;
+    const match = url.match(regExp);
+    return (match && match[1]) ? match[1] : "";
+}
+
 async function fetchLectureData(courseId) {
     // Lấy thông tin khóa học
     const resCourse = await fetch(`${BASE_URL}/course/${courseId}`);
@@ -213,18 +219,35 @@ function renderLecturePlaylist() {
             videoWrapper.style.background = "#181818";
             videoWrapper.style.borderRadius = "12px";
 
-            const video = document.createElement('video');
-            video.src = curLecture.videoUrl;
-            video.controls = true;
-            video.style.position = "absolute";
-            video.style.top = "0";
-            video.style.left = "0";
-            video.style.width = "100%";
-            video.style.height = "100%";
-            video.style.objectFit = "cover";
-            video.style.borderRadius = "12px";
+            const videoUrl = curLecture.videoUrl || "";
 
-            videoWrapper.appendChild(video);
+            if (videoUrl.includes("youtube.com") || videoUrl.includes("youtu.be")) {
+                const videoId = extractYouTubeId(videoUrl);
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                iframe.allowFullscreen = true;
+                iframe.frameBorder = "0";
+                iframe.style.position = "absolute";
+                iframe.style.top = "0";
+                iframe.style.left = "0";
+                iframe.style.width = "100%";
+                iframe.style.height = "100%";
+                iframe.style.borderRadius = "12px";
+                videoWrapper.appendChild(iframe);
+            } else {
+                const video = document.createElement('video');
+                video.controls = true;
+                video.src = videoUrl.startsWith("http") ? videoUrl : `${BASE_URL}${videoUrl}`;
+                video.style.position = "absolute";
+                video.style.top = "0";
+                video.style.left = "0";
+                video.style.width = "100%";
+                video.style.height = "100%";
+                video.style.objectFit = "cover";
+                video.style.borderRadius = "12px";
+                videoWrapper.appendChild(video);
+            }
+
             videoContainer.appendChild(videoWrapper);
         }
     }
@@ -295,10 +318,11 @@ function renderLecturePlaylist() {
         // Xử lý submit modal thêm/sửa bài học
         modalForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            let finalVideoUrl = inputUrl.value.trim(); // mặc định là URL người dùng nhập
+
             const lessonTitle = inputTitle.value.trim();
-            const lessonUrl = inputUrl.value.trim();
             const chapter = chapters[chapterIdx];
-            if (!lessonTitle || !lessonUrl) return;
+            if (!lessonTitle || !finalVideoUrl) return;
 
             if (type === "add") {
                 // Thêm bài học mới (POST /lesson)
@@ -308,7 +332,7 @@ function renderLecturePlaylist() {
                     body: JSON.stringify({
                         title: lessonTitle,
                         chapter_id: chapter.chapter_id,
-                        video_url: lessonUrl
+                        video_url: finalVideoUrl
                     })
                 });
                 showToast("Thêm bài học thành công!", "success");
@@ -321,7 +345,7 @@ function renderLecturePlaylist() {
                     body: JSON.stringify({
                         title: lessonTitle,
                         content: "",
-                        video_url: lessonUrl
+                        video_url: finalVideoUrl
                     })
                 });
                 showToast("Đã sửa bài học!", "success");

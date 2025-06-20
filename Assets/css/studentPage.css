@@ -295,9 +295,10 @@ a {
 
 .popular .course-item .thumb {
     width: calc(100% + 2px);
-    height: 278px;
+    height: 230px;
     margin: -1px;
     object-fit: cover;
+    border-radius: 12px 12px 0 0;
 }
 
 .popular .course-item .info {
